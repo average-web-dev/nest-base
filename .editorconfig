@@ -1,0 +1,28 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+indent_style = space
+indent_size = 2
+
+# Matches JS/TS files
+[*.{js,ts,tsx}]
+quote_type = single
+max_line_length = 100
+
+# Matches JSON and YAML
+[*.{json,yml,yaml}]
+indent_size = 2
+
+# Markdown: no trimming whitespace
+[*.md]
+trim_trailing_whitespace = false
+
+# NestJS config and env files
+[*.{env,env.*}]
+end_of_line = lf
+insert_final_newline = false
