@@ -1,12 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Max, Min, validateSync } from 'class-validator';
-
-enum Environment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test',
-  Provision = 'provision',
-}
+import { IsNumber, IsOptional, IsString, Matches, Max, Min, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsNumber()
@@ -29,6 +22,13 @@ class EnvironmentVariables {
 
   @IsString()
   JWT_SECRET: string;
+
+  @IsString()
+  @IsOptional()
+  @Matches(/^\d+[smhd]$/, {
+    message: 'JWT_EXPIRES_IN must be a valid time string (e.g. 30m, 1h, 7d)',
+  })
+  JWT_EXPIRES_IN: string;
 }
 
 /**APP_PORT=3000
@@ -48,7 +48,11 @@ export function validate(config: Record<string, unknown>) {
   const errors = validateSync(validatedConfig, { skipMissingProperties: false });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString());
+    const errorStrings = errors
+      .map((err) => Object.values(err.constraints || {}).join(', '))
+      .join('; ');
+
+    throw new Error(errorStrings);
   }
   return validatedConfig;
 }
