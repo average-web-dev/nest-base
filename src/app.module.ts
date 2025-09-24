@@ -9,7 +9,14 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphqlModule } from './graphql/graphql.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, DatabaseModule, ConfigModule, EventEmitterModule.forRoot(), GraphqlModule],
+  imports: [
+    UsersModule,
+    AuthModule,
+    DatabaseModule,
+    ConfigModule,
+    EventEmitterModule.forRoot(),
+    GraphqlModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

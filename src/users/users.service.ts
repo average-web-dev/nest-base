@@ -18,6 +18,17 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
+  findOneWithPassword(id: string): Promise<User | null> {
+    return this.usersRepository
+      .createQueryBuilder()
+      .setFindOptions({
+        take: 1,
+      })
+      .whereInIds(id)
+      .addSelect('User.password')
+      .getOne();
+  }
+
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
