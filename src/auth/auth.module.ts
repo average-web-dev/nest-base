@@ -9,11 +9,13 @@ import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthResolver } from './auth.resolver';
-import { GqlAuthGuard } from './gql-auth.guard';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { RefreshTokenModule } from '@/refreshTokens/refreshToken.module';
 
 @Module({
   imports: [
     UsersModule,
+    RefreshTokenModule,
     PassportModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
@@ -25,7 +27,7 @@ import { GqlAuthGuard } from './gql-auth.guard';
     AuthResolver,
     {
       provide: APP_GUARD,
-      useClass: GqlAuthGuard,
+      useClass: JwtAuthGuard,
     },
   ],
   exports: [AuthService],

@@ -1,3 +1,4 @@
 export interface JwtPayload {
-  id: string;
+  refreshTokenId: string;
+  type: 'access';
 }

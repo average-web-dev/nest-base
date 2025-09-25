@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from './config/config.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphqlModule } from './graphql/graphql.module';
+import { RefreshTokenModule } from './refreshTokens/refreshToken.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GraphqlModule } from './graphql/graphql.module';
     ConfigModule,
     EventEmitterModule.forRoot(),
     GraphqlModule,
+    RefreshTokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],

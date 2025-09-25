@@ -1,5 +1,6 @@
+import { RefreshToken } from '@/refreshTokens/refreshToken.entity';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -10,4 +11,7 @@ export class User {
 
   @Column({ select: false })
   password: string;
+
+  @OneToMany(() => RefreshToken, (jwt) => jwt.user)
+  tokens: Promise<RefreshToken[]>;
 }

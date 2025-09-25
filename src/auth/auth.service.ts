@@ -4,12 +4,15 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { JwtPayload } from './jwt-payload.dto';
+import { RefreshTokenService } from '@/refreshTokens/refreshToken.service';
+import { RefreshToken } from '@/refreshTokens/refreshToken.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
-    private usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
   async validateUser(id: string, pass: string): Promise<Omit<User, 'password'> | null> {
@@ -21,12 +24,20 @@ export class AuthService {
     return null;
   }
 
-  login(user: User): string {
-    const payload = this.buildPayload(user);
+  generateAccessToken(refreshToken: RefreshToken): string {
+    const payload: JwtPayload = {
+      refreshTokenId: refreshToken.id,
+      type: 'access',
+    };
+
     return this.jwtService.sign(payload);
   }
 
-  private buildPayload(user: User): JwtPayload {
-    return { id: user.id };
+  async login(user: User): Promise<{ accessToken: string; refreshToken: string }> {
+    const refreshToken = await this.refreshTokenService.create(user);
+    return {
+      refreshToken: refreshToken.token,
+      accessToken: this.generateAccessToken(refreshToken),
+    };
   }
 }

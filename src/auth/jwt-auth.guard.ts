@@ -1,7 +1,16 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
+import { IncomingMessage } from 'http';
+import { Context } from 'graphql-ws';
 import { IS_PUBLIC_KEY } from './public.decorator';
+
+type CtxContext = {
+  req:
+    | IncomingMessage
+    | Context<Record<string, string>, { socket: WebSocket; request: IncomingMessage }>;
+};
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -18,5 +27,33 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true;
     }
     return super.canActivate(context);
+  }
+
+  getRequest(context: ExecutionContext): any {
+    switch (context.getType<GqlContextType>()) {
+      default:
+        return super.getRequest(context);
+        break;
+
+      case 'graphql':
+        return this.getRequestGraphQL(context);
+        break;
+    }
+  }
+
+  getRequestGraphQL(context: ExecutionContext) {
+    const requestOrContext = GqlExecutionContext.create(context).getContext<CtxContext>().req;
+    if ('extra' in requestOrContext) {
+      // GraphQL WS
+      const request: IncomingMessage = requestOrContext.extra.request;
+
+      Object.entries(requestOrContext.connectionParams || {}).forEach(([key, value]) => {
+        request.headers[key.toLowerCase()] = value;
+      });
+
+      return request;
+    }
+
+    return requestOrContext;
   }
 }

@@ -1,9 +1,7 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { GqlAuthGuard } from '@/auth/gql-auth.guard';
 
 const pubSub = new PubSub();
 
@@ -12,7 +10,6 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Query(() => [User])
-  @UseGuards(GqlAuthGuard)
   async users(): Promise<User[]> {
     return this.usersService.findAll();
   }
