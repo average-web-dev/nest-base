@@ -3,12 +3,17 @@
 # ------------------------------------------------------
 
 type Mutation {
+  addPost(message: String!): String!
   login(password: String!, username: String!): String!
 }
 
 type Query {
   me: User!
   users: [User!]!
+}
+
+type Subscription {
+  postsAdded: String!
 }
 
 type User {

@@ -6,8 +6,8 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 export class GqlLocalAuthGuard extends LocalAuthGuard {
   getRequest(context: ExecutionContext) {
     const gqlExecutionContext = GqlExecutionContext.create(context);
-    const gqlContext = gqlExecutionContext.getContext();
-    const gqlArgs = gqlExecutionContext.getArgs();
+    const gqlContext = gqlExecutionContext.getContext<{ req: { body: Record<string, unknown> } }>();
+    const gqlArgs = gqlExecutionContext.getArgs<Record<string, unknown>>();
 
     gqlContext.req.body = { ...gqlContext.req.body, ...gqlArgs };
     return gqlContext.req;

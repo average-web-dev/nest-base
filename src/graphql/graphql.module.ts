@@ -13,6 +13,9 @@ import { join } from 'path';
       definitions: {
         path: join(process.cwd(), 'gen/graphql.schema.ts'),
       },
+      subscriptions: {
+        'graphql-ws': true,
+      },
     }),
   ],
 })
