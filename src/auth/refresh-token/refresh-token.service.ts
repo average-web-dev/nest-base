@@ -1,13 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtService as JwtServiceNative } from '@nestjs/jwt';
 import { RefreshToken } from './refresh-token.entity';
 import { RefreshTokenPayload } from './refresh-token-payload.dto';
-import { refreshTokenConfig } from './refresh-token.config';
-import { ConfigType } from '@nestjs/config';
-import { User } from '@/users/user.entity';
 
 @Injectable()
 export class RefreshTokenService {
@@ -15,8 +12,6 @@ export class RefreshTokenService {
     @InjectRepository(RefreshToken)
     private readonly refreshTokenRepository: Repository<RefreshToken>,
     private readonly jwtService: JwtServiceNative,
-    @Inject(refreshTokenConfig.KEY)
-    private readonly refreshTokenonfiguration: ConfigType<typeof refreshTokenConfig>,
   ) {}
 
   findOneByToken(tokenString: string): Promise<RefreshToken | null> {

@@ -3,7 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { accessTokenConfig } from './access-token.config';
-import { UsersService } from '@/users/users.service';
 import { AccessTokenPayload } from './access-token-payload.dto';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 
@@ -13,7 +12,6 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy) {
     @Inject(accessTokenConfig.KEY)
     private readonly accessTokenConfiguration: ConfigType<typeof accessTokenConfig>,
     private readonly refreshTokenService: RefreshTokenService,
-    private readonly usersService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
