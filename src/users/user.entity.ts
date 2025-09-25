@@ -1,4 +1,4 @@
-import { RefreshToken } from '@/refreshTokens/refreshToken.entity';
+import { RefreshToken } from '@/auth/refresh-token/refresh-token.entity';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 

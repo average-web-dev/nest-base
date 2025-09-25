@@ -1,8 +1,8 @@
 import { registerAs } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt';
 
-export const jwtConfig = registerAs(
-  'JWT',
+export const accessTokenConfig = registerAs(
+  'ACCESS_TOKEN',
   () =>
     ({
       global: false,

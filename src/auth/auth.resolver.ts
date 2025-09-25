@@ -1,34 +1,20 @@
-import {
-  Args,
-  Field,
-  Mutation,
-  ObjectType,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './curent-user.decorator';
 import { UseGuards } from '@nestjs/common';
 import { User } from '@/users/user.entity';
 import { Public } from './public.decorator';
 import { LocalAuthGuard } from './local-auth.guard';
-import { RefreshTokenService } from '@/refreshTokens/refreshToken.service';
-import { RefreshToken } from '@/refreshTokens/refreshToken.entity';
-
-@ObjectType()
-class LoginResponse {
-  @Field(() => String)
-  accessToken: string;
-  @Field(() => String)
-  refreshToken: string;
-}
+import { RefreshTokenService } from './refresh-token/refresh-token.service';
+import { RefreshToken } from './refresh-token/refresh-token.entity';
+import { AccessTokenService } from './access-token/access-token.service';
+import { LoginResponse } from './loginResponse.dto';
 
 @Resolver(() => User)
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
+    private readonly accessTokenService: AccessTokenService,
     private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
@@ -56,7 +42,7 @@ export class AuthResolver {
       throw new Error('Invalid refresh token');
     }
 
-    return this.authService.generateAccessToken(refreshToken);
+    return this.accessTokenService.generateToken(refreshToken);
   }
 
   @Query(() => User)

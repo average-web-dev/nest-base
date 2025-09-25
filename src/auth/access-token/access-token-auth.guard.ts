@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { IncomingMessage } from 'http';
 import { Context } from 'graphql-ws';
-import { IS_PUBLIC_KEY } from './public.decorator';
+import { IS_PUBLIC_KEY } from '../public.decorator';
 
 type CtxContext = {
   req:
@@ -13,7 +13,7 @@ type CtxContext = {
 };
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class AccessTokenAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();
   }

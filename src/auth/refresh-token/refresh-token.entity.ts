@@ -1,6 +1,13 @@
 import { User } from '@/users/user.entity';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  RelationId,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -11,6 +18,9 @@ export class RefreshToken {
 
   @ManyToOne(() => User, (user) => user.id)
   user: Promise<User>;
+
+  @RelationId((refreshToken: RefreshToken) => refreshToken.user)
+  userId: string;
 
   @Column({ select: false })
   token: string;

@@ -3,9 +3,9 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtService as JwtServiceNative } from '@nestjs/jwt';
-import { RefreshToken } from './refreshToken.entity';
-import { RefreshTokenPayload } from './refreshToken-payload.dto';
-import { refreshTokenConfig } from './refreshToken.config';
+import { RefreshToken } from './refresh-token.entity';
+import { RefreshTokenPayload } from './refresh-token-payload.dto';
+import { refreshTokenConfig } from './refresh-token.config';
 import { ConfigType } from '@nestjs/config';
 import { User } from '@/users/user.entity';
 
@@ -36,9 +36,7 @@ export class RefreshTokenService {
     }
   }
 
-  async create(user: User): Promise<RefreshToken>;
-  async create(userId: string): Promise<RefreshToken>;
-  async create(userOrId: User | string): Promise<RefreshToken> {
+  async create(userId: string): Promise<RefreshToken> {
     const id = uuidv4();
     const payload: RefreshTokenPayload = {
       id,
@@ -51,7 +49,7 @@ export class RefreshTokenService {
     const model = this.refreshTokenRepository.create({
       id,
       token,
-      user: typeof userOrId === 'object' ? userOrId : { id: userOrId },
+      userId,
       expiresAt: new Date(exp * 1000),
       createdAt: new Date(iat * 1000),
     });

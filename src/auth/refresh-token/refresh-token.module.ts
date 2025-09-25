@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RefreshTokenService } from './refreshToken.service';
+import { RefreshTokenService } from './refresh-token.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshToken } from './refreshToken.entity';
-import { refreshTokenConfig } from './refreshToken.config';
+import { RefreshToken } from './refresh-token.entity';
+import { refreshTokenConfig } from './refresh-token.config';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
