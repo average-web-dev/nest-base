@@ -38,7 +38,7 @@ export class AuthResolver {
   async refreshToken(@Args('refreshToken') refreshTokenString: string): Promise<string> {
     const refreshToken = await this.refreshTokenService.findOneByToken(refreshTokenString);
     // TODO: proper error handling, expired tokens, revoked tokens, not found tokens
-    if (!refreshToken) {
+    if (!refreshToken || refreshToken.revoked) {
       throw new Error('Invalid refresh token');
     }
 

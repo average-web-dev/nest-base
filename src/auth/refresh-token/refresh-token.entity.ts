@@ -19,6 +19,7 @@ export class RefreshToken {
   @ManyToOne(() => User, (user) => user.id)
   user: Promise<User>;
 
+  @Column()
   @RelationId((refreshToken: RefreshToken) => refreshToken.user)
   userId: string;
 

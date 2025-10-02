@@ -10,13 +10,13 @@ import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 export class AccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject(accessTokenConfig.KEY)
-    private readonly accessTokenConfiguration: ConfigType<typeof accessTokenConfig>,
+    private readonly accessTokenConfigService: ConfigType<typeof accessTokenConfig>,
     private readonly refreshTokenService: RefreshTokenService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: accessTokenConfiguration.secret,
+      secretOrKey: accessTokenConfigService.publicKey ?? accessTokenConfigService.secret ?? '',
     });
   }
 
