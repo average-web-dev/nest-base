@@ -14,7 +14,13 @@ import { join } from 'path';
         path: join(process.cwd(), 'gen/graphql.schema.ts'),
       },
       subscriptions: {
-        'graphql-ws': true,
+        'graphql-ws': {
+          onConnect: (context) => {
+            const { connectionParams, extra } = context;
+
+            extra.connectionParams = connectionParams;
+          },
+        },
       },
       context: ({ req, res }) => ({ req, res }),
     }),

@@ -9,7 +9,7 @@ import { IS_PUBLIC_KEY } from '../public.decorator';
 type CtxContext = {
   req:
     | IncomingMessage
-    | Context<Record<string, string>, { socket: WebSocket; request: IncomingMessage }>;
+    | Context<Record<string, string>, { socket: WebSocket; request: IncomingMessage, connectionParams: Record<string, string> }>;
 };
 
 @Injectable()
@@ -46,10 +46,12 @@ export class AccessTokenAuthGuard extends AuthGuard('jwt') {
     if ('extra' in requestOrContext) {
       // GraphQL WS
       const request: IncomingMessage = requestOrContext.extra.request;
-
-      Object.entries(requestOrContext.connectionParams || {}).forEach(([key, value]) => {
-        request.headers[key.toLowerCase()] = value;
-      });
+      const authorizationKey = Object.keys(requestOrContext.extra.connectionParams).find(
+        (key) => key.toLowerCase() === 'authorization'
+      );
+      if (authorizationKey) {
+        request.headers.authorization = requestOrContext.extra.connectionParams[authorizationKey];
+      }
 
       return request;
     }
