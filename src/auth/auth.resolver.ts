@@ -9,6 +9,8 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { RefreshToken } from './refresh-token/refresh-token.entity';
 import { AccessTokenService } from './access-token/access-token.service';
 import { LoginResponse } from './loginResponse.dto';
+import { GqlThrottlerGuard } from '@/throttler/gqlThrottler.guard';
+import { Throttle } from '@nestjs/throttler';
 
 @Resolver(() => User)
 export class AuthResolver {
@@ -20,7 +22,8 @@ export class AuthResolver {
 
   @Mutation(() => LoginResponse)
   @Public()
-  @UseGuards(LocalAuthGuard)
+  @Throttle({ default: { ttl: 60000, limit: 5 } }) // limit to 5 login attempts per minute
+  @UseGuards(GqlThrottlerGuard, LocalAuthGuard)
   login(
     @CurrentUser() user: User,
     // args are required by passport-local strategy but not used

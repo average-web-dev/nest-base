@@ -5,6 +5,7 @@ import { DatabaseModule } from '@/database/database.module';
 import { ConfigModule } from '@/config/config.module';
 import { GraphqlModule } from '@/graphql/graphql.module';
 import { EventsModule } from '@/events/events.module';
+import { ThrottlerModule } from './throttler/throttler.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { EventsModule } from '@/events/events.module';
     ConfigModule,
     GraphqlModule,
     EventsModule,
+    ThrottlerModule,
   ],
 })
 export class AppModule {}

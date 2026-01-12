@@ -16,6 +16,7 @@ import { join } from 'path';
       subscriptions: {
         'graphql-ws': true,
       },
+      context: ({ req, res }) => ({ req, res }),
     }),
   ],
 })
