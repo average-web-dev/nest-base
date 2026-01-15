@@ -14,6 +14,12 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
+  @Query(() => User)
+  async user(@Args('id') id: string,): Promise<User | null> {
+    return this.usersService.findOne(id);
+  }
+
+
   // TMP
   @Subscription(() => String, { name: 'postsAdded' })
   postsAdded() {
